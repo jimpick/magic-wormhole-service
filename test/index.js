@@ -3,8 +3,8 @@ const sendBtnEl = document.getElementById('sendBtn')
 const sendCodeEl = document.getElementById('sendCode')
 const sendStatusEl = document.getElementById('sendStatus')
 
-const origin = 'http://localhost:3000'
-const wsOrigin = 'ws://localhost:3000'
+const origin = 'http://localhost:38881'
+const wsOrigin = 'ws://localhost:38881'
 
 sendBtnEl.addEventListener('click', async e => {
   try {

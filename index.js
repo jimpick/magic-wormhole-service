@@ -8,6 +8,10 @@ fastify.register(require('fastify-websocket'), { handle: handleWebsocket })
 const statuses = {}
 const emitters = {}
 
+// For python 3
+process.env.LC_ALL = 'C.UTF-8'
+process.env.LANG = 'C.UTF-8'
+
 function handleWebsocket (conn, req) {
   const match = req.url.match(/^\/status\/(.*)$/)
   if (!match) {
@@ -112,12 +116,16 @@ fastify.get('/receive/:code', async (request, reply) => {
     }
     return { error: 'exception occurred' }
   }
-  return 'Test'
+})
+
+fastify.get('/', async (request, reply) => {
+  return 'Magic Wormhole Service'
 })
 
 const start = async () => {
+  const port = process.env.PORT || 38881
   try {
-    await fastify.listen(3000)
+    await fastify.listen(port, '0.0.0.0')
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
