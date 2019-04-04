@@ -92,13 +92,25 @@ fastify.get('/receive/:code', async (request, reply) => {
       })
       wormhole.on('close', code => {
         console.log(`child process exited with code ${code}`)
+        if (code) {
+          return reject(new Error('Receive error'))
+        }
         resolve(resultString)
       })
+      setTimeout(() => {
+        console.log('Timeout')
+        wormhole.kill()
+        reject(new Error('Timeout'))
+      }, 10000)
     }))()
     return result
   } catch (e) {
     console.error('Exception', e)
-    return { error: 'exception' }
+    reply.code(400)
+    if (e.message === 'Timeout') {
+      return { error: 'timeout' }
+    }
+    return { error: 'exception occurred' }
   }
   return 'Test'
 })
