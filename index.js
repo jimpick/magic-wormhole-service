@@ -2,6 +2,11 @@ const { spawn } = require('child_process')
 const fastify = require('fastify')({ logger: true })
 
 fastify.register(require('fastify-cors'))
+fastify.register(require('fastify-websocket'), { handle })
+
+function handle (conn) {
+  conn.pipe(conn) // creates a echo server
+}
 
 fastify.post('/send', async (request, reply) => {
   const text = request.body
@@ -24,6 +29,7 @@ fastify.post('/send', async (request, reply) => {
         console.log(`child process exited with code ${code}`)
       })
     }))()
+    reply.code(201)
     return { code: result }
   } catch (e) {
     console.error('Exception', e)
