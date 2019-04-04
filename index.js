@@ -1,6 +1,8 @@
 const { spawn } = require('child_process')
 const fastify = require('fastify')({ logger: true })
 
+fastify.register(require('fastify-cors'))
+
 fastify.post('/send', async (request, reply) => {
   const text = request.body
   if (!text) return { error: 'no body' }
