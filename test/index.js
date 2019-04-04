@@ -18,13 +18,28 @@ sendBtnEl.addEventListener('click', async e => {
   const json = await res.json()
   console.log('json', json)
   sendCodeEl.innerText = `Code: ${json.code}`
-  sendStatusEl.innerText = `Waiting for other end...`
+  const socket = new WebSocket(`ws://localhost:3000/status/${json.id}`)
+  sendStatusEl.innerText = ''
+  socket.onopen = event => {
+    socket.onmessage = async event => {
+      const blob = event.data
+      const text = await (new Response(blob)).text()
+      console.log('ws data:', text)
+      sendStatusEl.innerText = text
+    }
+  }
 })
 
 const receiveCodeEl = document.getElementById('receiveCode')
 const receiveBtnEl = document.getElementById('receiveBtn')
 const receiveSecretEl = document.getElementById('receiveSecret')
 const receiveStatusEl = document.getElementById('receiveStatus')
+
+const copyCodeBtnEl = document.getElementById('copyCodeBtn')
+copyCodeBtnEl.addEventListener('click', async e => {
+  receiveCodeEl.value = sendCodeEl.innerText.replace(/Code: /, '')
+})
+
 
 receiveBtnEl.addEventListener('click', async e => {
   const code = receiveCodeEl.value
