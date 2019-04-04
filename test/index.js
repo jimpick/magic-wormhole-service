@@ -3,11 +3,14 @@ const sendBtnEl = document.getElementById('sendBtn')
 const sendCodeEl = document.getElementById('sendCode')
 const sendStatusEl = document.getElementById('sendStatus')
 
+const origin = 'http://localhost:3000'
+const wsOrigin = 'ws://localhost:3000'
+
 sendBtnEl.addEventListener('click', async e => {
   try {
     const secret = sendSecretEl.value
     sendStatusEl.innerText = 'connecting'
-    const res = await fetch('http://localhost:3000/send', {
+    const res = await fetch(`${origin}/send`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: secret
@@ -20,7 +23,7 @@ sendBtnEl.addEventListener('click', async e => {
     const json = await res.json()
     console.log('json', json)
     sendCodeEl.innerText = `Code: ${json.code}`
-    const socket = new WebSocket(`ws://localhost:3000/status/${json.id}`)
+    const socket = new WebSocket(`${wsOrigin}/status/${json.id}`)
     sendStatusEl.innerText = ''
     socket.onopen = event => {
       socket.onmessage = async event => {
@@ -50,10 +53,9 @@ copyCodeBtnEl.addEventListener('click', async e => {
 receiveBtnEl.addEventListener('click', async e => {
   try {
     const code = receiveCodeEl.value
-    const url = `http://localhost:3000/receive/${code}`
     receiveSecretEl.innerText = ''
     receiveStatusEl.innerText = 'receiving'
-    const res = await fetch(url)
+    const res = await fetch(`${origin}/receive/${code}`)
     if (res.status !== 200) {
       try {
         const json = await res.json()
