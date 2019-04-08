@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build-docker": "docker build -t jimpick/magic-wormhole-service ."
+    "build-docker": "docker build -t jimpick/magic-wormhole-service .",
+    "run-docker": "docker run -p 38881:38881 --name wormhole -d jimpick/magic-wormhole-service"
   },
   "keywords": [],
   "author": "Jim Pick (@jimpick)",
