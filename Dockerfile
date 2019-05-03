@@ -7,5 +7,5 @@ WORKDIR /usr/src/wormhole-service
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 38881
+EXPOSE 8080
 CMD [ "npm", "start" ]

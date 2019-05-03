@@ -123,7 +123,7 @@ fastify.get('/', async (request, reply) => {
 })
 
 const start = async () => {
-  const port = process.env.PORT || 38881
+  const port = process.env.PORT || 8080
   try {
     await fastify.listen(port, '0.0.0.0')
   } catch (err) {
